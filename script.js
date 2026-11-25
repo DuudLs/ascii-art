@@ -7,13 +7,11 @@ const ascii = document.getElementById("ascii");
 const ctx = canvas.getContext("2d");
 
 video.addEventListener("loadeddata", () => {
-  width = 100;
+  width = 300;
   height = Math.floor((video.videoHeight / video.videoWidth) * width * 0.5);
-  canvas.width = 100;
-  canvas.height = Math.floor(
-    (video.videoHeight / video.videoWidth) * width * 0.5,
-  );
-
+  canvas.width = width;
+  canvas.height = height;
+  resizeAscii();
   renderFrame();
 });
 
@@ -39,3 +37,12 @@ const renderFrame = () => {
   ascii.textContent = asciiImage;
   requestAnimationFrame(renderFrame);
 };
+
+function resizeAscii() {
+  if (!width || !height) return;
+  const fontByWidth = window.innerWidth / (width * 0.6);
+  const fontByHeight = window.innerHeight / height;
+  ascii.style.fontSize = Math.min(fontByWidth, fontByHeight) + "px";
+}
+
+window.addEventListener("resize", resizeAscii);
