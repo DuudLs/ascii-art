@@ -20,7 +20,6 @@ video.addEventListener("loadeddata", () => {
 const renderFrame = () => {
   ctx.drawImage(video, 0, 0, width, height);
   const imageData = ctx.getImageData(0, 0, width, height);
-  console.log(imageData);
   const data = imageData.data;
   const chars = "@%#*+=-:. ";
   let asciiImage = "";
