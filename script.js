@@ -19,8 +19,9 @@ const renderFrame = () => {
   ctx.drawImage(video, 0, 0, width, height);
   const imageData = ctx.getImageData(0, 0, width, height);
   const data = imageData.data;
-  const chars = "@%#*+=-:. ";
+  const chars = " .:-=+*#%@";
   let asciiImage = "";
+
   for (let y = 0; y < height; y++) {
     let row = "";
     for (let x = 0; x < width; x++) {
@@ -30,11 +31,25 @@ const renderFrame = () => {
       const b = data[i + 2];
       const brightness = (r + g + b) / 3;
       const charIndex = Math.floor((brightness / 255) * (chars.length - 1));
-      row += chars[charIndex];
+      let char = chars[charIndex];
+      if (char === " ") char = "&nbsp;";
+      if (r > 70 && r > g * 1.3 && r > b * 1.3) {
+        row += `<span style="color: #ff2a2a;">${char}</span>`;
+      } else if (
+        g > 20 &&
+        g >= r * 0.98 &&
+        g >= b * 0.98 &&
+        (g > r + 4 || g > b + 4)
+      ) {
+        row += `<span style="color: #2ecc40;">${char}</span>`;
+      } else {
+        row += char;
+      }
     }
-    asciiImage += row + "\n";
+
+    asciiImage += row + "<br>";
   }
-  ascii.textContent = asciiImage;
+  ascii.innerHTML = asciiImage;
   requestAnimationFrame(renderFrame);
 };
 
